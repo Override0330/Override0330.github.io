@@ -1,0 +1,148 @@
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="Override"><meta name="renderer" content="webkit"><meta name="copyright" content="Override"><meta name="keywords" content="Override0330"><meta name="description" content="null"><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>Java接口回调的自我理解 · Override's Blog from GitHub</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/Myojyafavicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
+  "use strict";
+  // rel=preload support test
+  if( !w.loadCSS ){
+    w.loadCSS = function(){};
+  }
+  // define on the loadCSS obj
+  var rp = loadCSS.relpreload = {};
+  // rel=preload feature support test
+  // runs once and returns a function for compat purposes
+  rp.support = (function(){
+    var ret;
+    try {
+      ret = w.document.createElement( "link" ).relList.supports( "preload" );
+    } catch (e) {
+      ret = false;
+    }
+    return function(){
+      return ret;
+    };
+  })();
+
+  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+  // then change that media back to its intended value on load
+  rp.bindMediaToggle = function( link ){
+    // remember existing media attr for ultimate state, or default to 'all'
+    var finalMedia = link.media || "all";
+
+    function enableStylesheet(){
+      link.media = finalMedia;
+    }
+
+    // bind load handlers to enable media
+    if( link.addEventListener ){
+      link.addEventListener( "load", enableStylesheet );
+    } else if( link.attachEvent ){
+      link.attachEvent( "onload", enableStylesheet );
+    }
+
+    // Set rel and non-applicable media type to start an async request
+    // note: timeout allows this to happen async to let rendering continue in IE
+    setTimeout(function(){
+      link.rel = "stylesheet";
+      link.media = "only x";
+    });
+    // also enable media after 3 seconds,
+    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+    setTimeout( enableStylesheet, 3000 );
+  };
+
+  // loop through link elements in DOM
+  rp.poly = function(){
+    // double check this to prevent external calls from running
+    if( rp.support() ){
+      return;
+    }
+    var links = w.document.getElementsByTagName( "link" );
+    for( var i = 0; i < links.length; i++ ){
+      var link = links[ i ];
+      // qualify links to those with rel=preload and as=style attrs
+      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+        // prevent rerunning on link
+        link.setAttribute( "data-loadcss", true );
+        // bind listeners to toggle media back
+        rp.bindMediaToggle( link );
+      }
+    }
+  };
+
+  // if unsupported, run the polyfill
+  if( !rp.support() ){
+    // run once at least
+    rp.poly();
+
+    // rerun poly on an interval until onload
+    var run = w.setInterval( rp.poly, 500 );
+    if( w.addEventListener ){
+      w.addEventListener( "load", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    } else if( w.attachEvent ){
+      w.attachEvent( "onload", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    }
+  }
+
+
+  // commonjs
+  if( typeof exports !== "undefined" ){
+    exports.loadCSS = loadCSS;
+  }
+  else {
+    w.loadCSS = loadCSS;
+  }
+}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/Myojya.jpg"></div><!--.profile-saying
+  i.fa.fa-comment
+  .saying--><div class="cxo-profile-inner"><div class="profile-name">Override</div><div class="profile-signature">CQUPT_RedrockMobileStudent</div><div class="friends"><div>FRIENDS</div><span><a href="//github.com/Sajotim" target="_black">大鸽Sajo的GitHub传送门</a></span></div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg3.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">Override的GitHub空间OvO</a></div><div class="intro-nav-label-box"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div></i><div class="clear"></div></section></nav><h1>Override的GitHub空间OvO</h1><h5>欢迎来到我的Blog鸭=。=</h5><div class="intro-social"><a class="fa fa-envelope" href="mailto:854098072@qq.com" title="email"></a><a class="fa fa-github" href="//github.com/Override0330" target="_blank" title="github"></a></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article id="page"><h1>Java接口回调的自我理解</h1><div class="article-container"><p>在近期做获取通话记录的app的时候，设置RecycleView的每一个item的单击时间监听器的时候卡了很久（wtcl），因为涉及到接口回调，特此开一篇博客来说说自己的理解，以加深对这个抽象概念的认识。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ol>
+<li>什么是接口(Interface)？<ul>
+<li>接口是java语言的一种抽象类型，包含抽象方法(即没有方法的具体实现)，一个类通过继承接口从而来继承接口的抽象方法。</li>
+<li>接口和类的不同之处<br>  1） 接口不能被实例化（没有构造方法）<br>  2） 接口中的方法都必须是抽象方法（即没有实现，只有声明）<br>  3） 接口不能包含成员变量，除了static和final变量<br>  4） 不能说类继承接口，而是说类实现了这个接口<br>  5） 接口可以多继承。</li>
+</ul>
+</li>
+<li>什么是回调？<ul>
+<li>回调是调用方式的一种，调用方式可以分为三类：<br>  1） 同步调用：一种阻塞式的调用，即我们常用的在函数A中通过书写函数B的名字调用这个函数，这样要等待B函数执行完毕后A才能继续执行。<br>  2） 异步调用：类似Android的标准广播机制，同时受到且互不影响。<br>  3） 回调： 回调是一种双向的调用模式，也就是说，被调用的接口被调用时也会调用对方的接口，例如A要调用B，B在执行完毕后又要调用A。</li>
+<li>回调一般用于不同层级间的协作，上一层级将他的函数安装在下层，这个函数就是回调函数，而下层在一定条件下会出发回调。</li>
+</ul>
+</li>
+<li>什么是接口回调？<ul>
+<li>在C/C艹中，实现回调函数很简单，只需要拿到这个函数的指针地址就可以了。但是在java中，我们没有指针，所以我们通过接口回调的方式来实现这一步骤，即：<br>把实现某一个接口的类创建的对象的引用赋给这个接口声明的接口变量，那么该接口变量就可以调用被调用类实现的接口的方法。下面我们来通过几个例子来说明。<h2 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h2></li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>较为简单的例子<br>背景：xxjj对hllj说，你快点学习，我把我的联系方式给你，一旦一学习完了马上用这个联系方式给我解释你学了什么。    <blockquote>
+<p>联系方式——&gt;xxjj对象的引用<br>给我解释你学了什么——&gt;这个接口的抽象方法的具体实现</p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li><p>先创建一个回调接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ExplainToXxjj</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doExplain</span><span class="params">()</span></span>;<span class="comment">//这里创造了一个接口，实现这个接口的类必须实现这个抽象方法。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建实现ExplainToXxjj接口的一个类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Xxjj</span> <span class="keyword">implements</span> <span class="title">ExplainToXxjj</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doExplain</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"向xxjj解释什么是接口回调"</span>);<span class="comment">//这里的Xxjj类实现了ExplainToXxjj接口</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建控制改接口何时回调时的类，需要得到Xxjj的地址（即回调接口）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hllj</span></span>&#123;</span><br><span class="line">    ExplainToXxjj explainToXxjj;<span class="comment">//声明一个接口变量</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Hllj</span><span class="params">(ExplainToXxjj explainToXxjj)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.explainToXxjj = explainToXxjj;</span><br><span class="line">    &#125;<span class="comment">//在构造方法中，将接口变量的值初始化</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">learn</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"学习中..."</span>)；</span><br><span class="line">        explainToXxjj.doExplain();<span class="comment">//在这里实现了回调，即通过接口变量调用被调用类实现的接口的方法（doExplain())</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> v<span class="function">oid <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        Xxjj xxjj = <span class="keyword">new</span> Xxjj;<span class="comment">//创建一个新的Xxjj实例</span></span><br><span class="line">        Hllj hllj = <span class="keyword">new</span> Hllj(xxjj);<span class="comment">//创建一个新的Hllj实例，并将刚才新建的Xxjj对象传进构造器。构造器则将这个实例的引用赋给了接口变量。</span></span><br><span class="line">        hllj.learn();<span class="comment">//此时调用Hllj的learn方法，然后learn方法中可以调用到Xxjj对象所实现的doExplainToXxjj方法。</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>代码运行过后的结果是：</p>
+<pre><code class="java">学习中...
+向Xxjj解释什么是接口回调
+</code></pre>
+<blockquote>
+<p>假如Xxjj把ExplainToXxjj的实现改成”一起BBT”那就是另一个故事了。</p>
+</blockquote>
+<p>是不是感觉逻辑其实很简单，可以看做interface变量充当了C艹里的对象的指针(?个人理解233333不一定对奥)  </p>
+<ul>
+<li>在Android开发中，接口回调被大量的使用，比如每一个单击事件监听器都使用了接口回调的方法，下面举例一个实际开发中的例子，为RecycleView的每一个item的单击事件监听器。</li>
+</ul>
+</div></article><nav class="cxo-page-nav"></nav></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>
