@@ -1,0 +1,124 @@
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="Override"><meta name="renderer" content="webkit"><meta name="copyright" content="Override"><meta name="keywords" content="Override0330"><meta name="description" content="null"><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>初步理解接口回调 · Override's Blog from GitHub</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/Myojyafavicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
+  "use strict";
+  // rel=preload support test
+  if( !w.loadCSS ){
+    w.loadCSS = function(){};
+  }
+  // define on the loadCSS obj
+  var rp = loadCSS.relpreload = {};
+  // rel=preload feature support test
+  // runs once and returns a function for compat purposes
+  rp.support = (function(){
+    var ret;
+    try {
+      ret = w.document.createElement( "link" ).relList.supports( "preload" );
+    } catch (e) {
+      ret = false;
+    }
+    return function(){
+      return ret;
+    };
+  })();
+
+  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+  // then change that media back to its intended value on load
+  rp.bindMediaToggle = function( link ){
+    // remember existing media attr for ultimate state, or default to 'all'
+    var finalMedia = link.media || "all";
+
+    function enableStylesheet(){
+      link.media = finalMedia;
+    }
+
+    // bind load handlers to enable media
+    if( link.addEventListener ){
+      link.addEventListener( "load", enableStylesheet );
+    } else if( link.attachEvent ){
+      link.attachEvent( "onload", enableStylesheet );
+    }
+
+    // Set rel and non-applicable media type to start an async request
+    // note: timeout allows this to happen async to let rendering continue in IE
+    setTimeout(function(){
+      link.rel = "stylesheet";
+      link.media = "only x";
+    });
+    // also enable media after 3 seconds,
+    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+    setTimeout( enableStylesheet, 3000 );
+  };
+
+  // loop through link elements in DOM
+  rp.poly = function(){
+    // double check this to prevent external calls from running
+    if( rp.support() ){
+      return;
+    }
+    var links = w.document.getElementsByTagName( "link" );
+    for( var i = 0; i < links.length; i++ ){
+      var link = links[ i ];
+      // qualify links to those with rel=preload and as=style attrs
+      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+        // prevent rerunning on link
+        link.setAttribute( "data-loadcss", true );
+        // bind listeners to toggle media back
+        rp.bindMediaToggle( link );
+      }
+    }
+  };
+
+  // if unsupported, run the polyfill
+  if( !rp.support() ){
+    // run once at least
+    rp.poly();
+
+    // rerun poly on an interval until onload
+    var run = w.setInterval( rp.poly, 500 );
+    if( w.addEventListener ){
+      w.addEventListener( "load", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    } else if( w.attachEvent ){
+      w.attachEvent( "onload", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    }
+  }
+
+
+  // commonjs
+  if( typeof exports !== "undefined" ){
+    exports.loadCSS = loadCSS;
+  }
+  else {
+    w.loadCSS = loadCSS;
+  }
+}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/Myojya.jpg"></div><!--.profile-saying
+  i.fa.fa-comment
+  .saying--><div class="cxo-profile-inner"><div class="profile-name">Override</div><div class="profile-signature">CQUPT_RedrockMobileStudent</div><div class="friends"><div>FRIENDS</div><span><a href="//github.com/Sajotim" target="_black">大鸽Sajo的GitHub传送门</a></span></div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg3.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">Override的GitHub空间OvO</a></div><div class="intro-nav-label-box"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div></i><div class="clear"></div></section></nav><h1 class="post-title">初步理解接口回调</h1><div class="post-intros"><div class="post-intro-meta"><span class="post-intro-time"><i class="post-intro-calendar fa fa-calendar"></i><span>2019-03-12</span></span></div></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article class="article-entry" id="post"><p>2019.03.09Android学习周记——初步理解接口回调<br>本文将通过自己的理解来一步一步浅层讲解接口回调<br>简书地址：<br><a href="https://www.jianshu.com/p/90190489fea7" target="_blank" rel="noopener">https://www.jianshu.com/p/90190489fea7</a></p>
+<blockquote>
+<p>这个星期事情比较多，占用了很多的时间，所以学习的东西相对较少。</p>
+</blockquote>
+<h3 id="1-回调（Callback"><a href="#1-回调（Callback" class="headerlink" title="1. 回调（Callback)"></a>1. 回调（Callback)</h3><p>回调的通俗理解就是 被调用者 返回去调用 调用者 的方法。<br>结合现实生活的一个简单例子就是：<br>A问B一个问题，B给A回答了问题，然后A对B的回答进行了判断<br>Java代码解释如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//调用者，同时也是回调处理者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ask</span><span class="params">(B b)</span></span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"1+1=？"</span>);</span><br><span class="line">        b.answer(<span class="string">"1+1=?"</span>,<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">agree</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"correct!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//被调用者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">answer</span><span class="params">(String question,A a)</span></span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"1+1=2"</span>);</span><br><span class="line">        a.agree();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//main函数</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        A a = <span class="keyword">new</span> A();</span><br><span class="line">        B b = <span class="keyword">new</span> B();</span><br><span class="line">        <span class="comment">//将对象b作为参数传入ask方法，才能够回调b的函数</span></span><br><span class="line">        a.ask(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Tips:最重要的一点是将B作为参数传递进去，才能实现了回调。</p>
+<h3 id="2-接口回调"><a href="#2-接口回调" class="headerlink" title="2. 接口回调"></a>2. 接口回调</h3><h3 id="2-1-接口-Interface"><a href="#2-1-接口-Interface" class="headerlink" title="2.1 接口(Interface)"></a>2.1 接口(Interface)</h3><p>接口在Java中是一个非常重要的概念，它和类有相似的地方也有很大的不同。具体哪里不同可以自行搜索。<br>接口就像是一个招牌，比如你在大街上看到KFC的招牌，你就知道那里肯定会卖汉堡、可乐、全家桶。在Java中，如果你实现了(Implements)了某个接口，你就<strong>必须</strong>实现这个接口所声明的所有方法，就好像一个KFC不卖汉堡的话那就不能成为一个快餐店(就不能当做实现了快餐店的接口)。举一个在Java中的例子，对象数组(或者List)的排序函数：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(Object[] a)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; <span class="keyword">void</span> <span class="title">sort</span><span class="params">(List&lt;T&gt; list)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>想要让自己的对象数组(或者List)能够使用这样的方法进行排序，那么需要对应实例的类实现Comparable接口才能进行排序，可以类比为，我实现了这个接口，我就有了一个招牌-&gt;我能排序，所以才能够调用这个方法来进行排序。<br>如果不是很理解接口的概念可以参考<a href="http://www.runoob.com/java/java-interfaces.html" target="_blank" rel="noopener">Java 接口 | 菜鸟教程</a></p>
+<h3 id="2-2-接口回调实现-Interface-Callback"><a href="#2-2-接口回调实现-Interface-Callback" class="headerlink" title="2.2 接口回调实现(Interface-Callback?)"></a>2.2 接口回调实现(Interface-Callback?)</h3><p>既然一个类可以实现了一个接口就要实现这个接口所规定的的方法，那么结合回调，如果将需要回调的方法定义在接口里会发生什么事呢？我们将之前回调的Java实例改造一下√<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//要被实现的接口</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Response</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">agree</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//调用者，同时也是回调处理者,实现了Response接口,必须具体实现agree方法</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">implements</span> <span class="title">Response</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ask</span><span class="params">(B b)</span></span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"1+1=？"</span>);</span><br><span class="line">        b.answer(<span class="string">"1+1=?"</span>,<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">agree</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"correct!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//被调用者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> </span>&#123;</span><br><span class="line">    <span class="comment">//这里的参数变成了一个实现了Response接口的对象</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">answer</span><span class="params">(String question,Response response)</span></span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"1+1=2"</span>);</span><br><span class="line">        response.agree();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        A a = <span class="keyword">new</span> A();</span><br><span class="line">        B b = <span class="keyword">new</span> B();</span><br><span class="line">        a.ask(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在这里，产生回调的函数所需要的参数变成了一个实现Response接口的对象，这样一来answer方法就变得很范用。在需要另一个对象c对b的回答（b回调c）的时候不需要在B类中重写answer的方法来实现b回调c，而只需要让c实现Response接口就可以了。<br>当然这样的接口回调在开发中一般不会出现，过于简单，为了便于理解才这么举例。接下来我们来看看在开发中的接口回调是如何使用的。</p>
+<h3 id="2-3-网络请求的回调"><a href="#2-3-网络请求的回调" class="headerlink" title="2.3 网络请求的回调"></a>2.3 网络请求的回调</h3><p>在Android开发中，我们经常需要使用到网络请求，然而网络请求是一个耗时的操作。我们经常需要遇到一个问题，比如我需要加载图片在UI中。在主线程（UI线程）中开一个线程来进行图片加载，我们需要在网络请求结束后回到主线程进行UI更新。那么如何判断网络请求结束并执行更新UI的操作呢？当然使我们的主角——接口回调。话不多说，先上代码√</p>
+<ul>
+<li><p>需要实现的接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Callback</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(String response)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onFailed</span><span class="params">(Throwable t)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>网络请求的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Request</span></span>&#123;</span><br><span class="line">    <span class="comment">//具体实现网络请求的方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">(Callback callback)</span></span>&#123;</span><br><span class="line">        <span class="comment">//网络请求具体逻辑忽略</span></span><br><span class="line">        String response = <span class="string">"网络请求的结果(JSON/XML)"</span>;</span><br><span class="line">        <span class="comment">//拿到网络请求的结果后启动回调</span></span><br><span class="line">        callback.onResponse(response);</span><br><span class="line">        <span class="comment">//......</span></span><br><span class="line">        <span class="comment">//出现异常</span></span><br><span class="line">        callback.onFailed(Exception e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用网络请求的地方</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//.....</span></span><br><span class="line">Request newRequest = <span class="keyword">new</span> Request();</span><br><span class="line"><span class="comment">//.....省略新开线程的代码</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    newRequest.start(<span class="keyword">new</span> Callback()&#123;</span><br><span class="line">          <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(String response)</span> </span>&#123;</span><br><span class="line">                <span class="comment">//这里是拿到数据后的逻辑</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailed</span><span class="params">(Throwable t)</span> </span>&#123;</span><br><span class="line">                <span class="comment">//异常抛出</span></span><br><span class="line">                t.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//......</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以上代码中的接口回调可能就比较熟悉了，这种以<strong>匿名内部类</strong>的形式进行接口回调的方式较为常用，比如Android监听器的设置，都是采用内部类的接口回调方式。这样做可以让需要被回调的方法的具体实现写在外面，你不可能每实现一个按钮的功能都要创建一个类，然后再实现接口，然后再写逻辑等。使用匿名内部类的方式可以很好地解决这个问题√</p>
+<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3. 总结"></a>3. 总结</h3><p>本文简单介绍了自己对接口回调的理解，我还在不断的学习中，如果有说的不对的地方，望各位大佬指正。最后的实例的完全版是一个用线程池封装好的一个网络请求工具类。做了一些更改然后放在这里作解释。<br>GitHub源码地址：<a href="https://github.com/Override0330/AndroidDevelopmentTools/tree/master/HttpRequsetHelper" target="_blank" rel="noopener">https://github.com/Override0330/AndroidDevelopmentTools/tree/master/HttpRequsetHelper</a></p>
+</article><!-- lincense--><div class="license-wrapper"><p> <span>Author:  </span><a href="Override0330.github.io">Override</a></p><p> <span>Link:  </span><a href="Override0330.github.io/2019/03/12/接口回调/">Override0330.github.io/2019/03/12/接口回调/</a></p><p> <span>Copyright:  </span><span>All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/3.0">CC BY-NC-SA 3.0</a> unless stating additionally.</span></p></div><div class="post-paginator"><a class="prevSlogan" href="/2019/03/12/ThreadPool/" title="java中的四种线程池"><span>< PreviousPost</span><br><span class="prevTitle">java中的四种线程池</span></a><a class="nextSlogan" href="/2019/03/03/Android_2019_03_03/" title="Android开发学习-2019.03.03"><span>NextPost ></span><br><span class="nextTitle">Android开发学习-2019.03.03</span></a><div class="clear"></div></div><div id="comment"></div></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><div class="toc-wrapper" style="top: 70vh;"><div class="toc-catalog"><i class="fa fa-list"> </i><span>CATALOG</span></div><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-回调（Callback"><span class="toc-number">1.</span> <span class="toc-text">1. 回调（Callback)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-接口回调"><span class="toc-number">2.</span> <span class="toc-text">2. 接口回调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-接口-Interface"><span class="toc-number">3.</span> <span class="toc-text">2.1 接口(Interface)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-接口回调实现-Interface-Callback"><span class="toc-number">4.</span> <span class="toc-text">2.2 接口回调实现(Interface-Callback?)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-网络请求的回调"><span class="toc-number">5.</span> <span class="toc-text">2.3 网络请求的回调</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-总结"><span class="toc-number">6.</span> <span class="toc-text">3. 总结</span></a></li></ol></div><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>
