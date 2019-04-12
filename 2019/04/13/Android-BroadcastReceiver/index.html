@@ -1,0 +1,149 @@
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="Override"><meta name="renderer" content="webkit"><meta name="copyright" content="Override"><meta name="keywords" content="Override0330"><meta name="description" content="null"><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>Android-Broadcast Receiver(广播接收器) · Override's Blog from GitHub</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/Myojyafavicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
+  "use strict";
+  // rel=preload support test
+  if( !w.loadCSS ){
+    w.loadCSS = function(){};
+  }
+  // define on the loadCSS obj
+  var rp = loadCSS.relpreload = {};
+  // rel=preload feature support test
+  // runs once and returns a function for compat purposes
+  rp.support = (function(){
+    var ret;
+    try {
+      ret = w.document.createElement( "link" ).relList.supports( "preload" );
+    } catch (e) {
+      ret = false;
+    }
+    return function(){
+      return ret;
+    };
+  })();
+
+  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+  // then change that media back to its intended value on load
+  rp.bindMediaToggle = function( link ){
+    // remember existing media attr for ultimate state, or default to 'all'
+    var finalMedia = link.media || "all";
+
+    function enableStylesheet(){
+      link.media = finalMedia;
+    }
+
+    // bind load handlers to enable media
+    if( link.addEventListener ){
+      link.addEventListener( "load", enableStylesheet );
+    } else if( link.attachEvent ){
+      link.attachEvent( "onload", enableStylesheet );
+    }
+
+    // Set rel and non-applicable media type to start an async request
+    // note: timeout allows this to happen async to let rendering continue in IE
+    setTimeout(function(){
+      link.rel = "stylesheet";
+      link.media = "only x";
+    });
+    // also enable media after 3 seconds,
+    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+    setTimeout( enableStylesheet, 3000 );
+  };
+
+  // loop through link elements in DOM
+  rp.poly = function(){
+    // double check this to prevent external calls from running
+    if( rp.support() ){
+      return;
+    }
+    var links = w.document.getElementsByTagName( "link" );
+    for( var i = 0; i < links.length; i++ ){
+      var link = links[ i ];
+      // qualify links to those with rel=preload and as=style attrs
+      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+        // prevent rerunning on link
+        link.setAttribute( "data-loadcss", true );
+        // bind listeners to toggle media back
+        rp.bindMediaToggle( link );
+      }
+    }
+  };
+
+  // if unsupported, run the polyfill
+  if( !rp.support() ){
+    // run once at least
+    rp.poly();
+
+    // rerun poly on an interval until onload
+    var run = w.setInterval( rp.poly, 500 );
+    if( w.addEventListener ){
+      w.addEventListener( "load", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    } else if( w.attachEvent ){
+      w.attachEvent( "onload", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    }
+  }
+
+
+  // commonjs
+  if( typeof exports !== "undefined" ){
+    exports.loadCSS = loadCSS;
+  }
+  else {
+    w.loadCSS = loadCSS;
+  }
+}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/Myojya.jpg"></div><!--.profile-saying
+  i.fa.fa-comment
+  .saying--><div class="cxo-profile-inner"><div class="profile-name">Override</div><div class="profile-signature">CQUPT_RedrockMobileStudent</div><div class="friends"><div>FRIENDS</div><span><a href="//github.com/Sajotim" target="_black">大鸽Sajo的GitHub传送门</a></span></div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg3.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">Override的GitHub空间OvO</a></div><div class="intro-nav-label-box"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div></i><div class="clear"></div></section></nav><h1 class="post-title">Android-Broadcast Receiver(广播接收器)</h1><div class="post-intros"><div class="post-intro-meta"><span class="post-intro-time"><i class="post-intro-calendar fa fa-calendar"></i><span>2019-04-13</span></span></div></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article class="article-entry" id="post"><p>简单记录Broadcast Receiver(广播接收器)的简单实用<br>掘金：<a href="https://juejin.im/post/5cb0cf5de51d456e5633ddc5" target="_blank" rel="noopener">https://juejin.im/post/5cb0cf5de51d456e5633ddc5</a></p>
+<h3 id="1-广播分类"><a href="#1-广播分类" class="headerlink" title="1. 广播分类"></a>1. 广播分类</h3><h4 id="1-1-Normal-broadcasts-标准广播"><a href="#1-1-Normal-broadcasts-标准广播" class="headerlink" title="1.1 Normal broadcasts 标准广播"></a>1.1 Normal broadcasts 标准广播</h4><p>完全异步的广播，所有的广播接收器几乎同时受到广播且无法截断。</p>
+<h4 id="1-2-Ordered-broadcast-有序广播"><a href="#1-2-Ordered-broadcast-有序广播" class="headerlink" title="1.2 Ordered broadcast 有序广播"></a>1.2 Ordered broadcast 有序广播</h4><p>显然对比与标准广播，有序广播就是有序的，可以设置各个接收器的优先级，可以被截断。</p>
+<h3 id="2-注册全局广播接收器"><a href="#2-注册全局广播接收器" class="headerlink" title="2. 注册全局广播接收器"></a>2. 注册全局广播接收器</h3><p>全部广播代表，整个Android系统中的所有广播接收器都可以收到的广播</p>
+<h4 id="2-1-动态注册广播接收器"><a href="#2-1-动态注册广播接收器" class="headerlink" title="2.1 动态注册广播接收器"></a>2.1 动态注册广播接收器</h4><h5 id="接受系统广播"><a href="#接受系统广播" class="headerlink" title="接受系统广播"></a>接受系统广播</h5><p>主要步骤如下：</p>
+<ol>
+<li><p>自定义广播接收器继承自BroadcastReceiver，并重写onReceive方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NetWorkReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line">            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);</span><br><span class="line">            networkInfo = connectivityManager.getActiveNetworkInfo();<span class="comment">//需要申请权限</span></span><br><span class="line">            <span class="keyword">if</span> (networkInfo != <span class="keyword">null</span> &amp;&amp; networkInfo.isAvailable())</span><br><span class="line">                Toast.makeText(context,<span class="string">"网络开启了"</span>,Toast.LENGTH_SHORT).show();</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                Toast.makeText(context,<span class="string">"网络关闭了"</span>,Toast.LENGTH_SHORT).show();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在代码中新建一个自定义广播接收器的实例，并在Activity中注册，注册时需要传入该广播接收器所接受的广播类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> IntentFilter intentFilter;</span><br><span class="line">    <span class="keyword">private</span> NetworkInfo networkInfo;</span><br><span class="line">    <span class="keyword">private</span> NetWorkReceiver netWorkReceiver;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        intentFilter = <span class="keyword">new</span> IntentFilter();</span><br><span class="line">        netWorkReceiver = <span class="keyword">new</span> NetWorkReceiver();</span><br><span class="line">        intentFilter.addAction(<span class="string">"android.net.conn.CONNECTIVITY_CHANGE"</span>);<span class="comment">//设置广播接收器接受的内容</span></span><br><span class="line">        registerReceiver(netWorkReceiver,intentFilter);<span class="comment">//注册广播接收器</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在Activity的onDestroy方法中要取消注册广播接收器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onDestroy();</span><br><span class="line">    unregisterReceiver(netWorkReceiver);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>此时变设置好了一个接受系统广播的广播接收器，当数据网络开关出现变化时，会接受到相应的广播并发出Toast信息。</p>
+<h4 id="2-2-注册静态广播接收器"><a href="#2-2-注册静态广播接收器" class="headerlink" title="2.2 注册静态广播接收器"></a>2.2 注册静态广播接收器</h4><p>静态广播接收器还有一个特性，那就是在系统没有启动的时候就能够接受广播并对他进行处理</p>
+<h5 id="2-2-1-接受系统广播（开机启动）"><a href="#2-2-1-接受系统广播（开机启动）" class="headerlink" title="2.2.1 接受系统广播（开机启动）"></a>2.2.1 接受系统广播（开机启动）</h5><ol>
+<li><p>同样自定义广播接收器继承自BroadcastReceiver，并重写onReceive方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BootCompleteReceiver</span> <span class="keyword">extends</span> <span class="title">BroadcastReceiver</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onReceive</span><span class="params">(Context context, Intent intent)</span> </span>&#123;</span><br><span class="line">        Toast.makeText(context,<span class="string">"开机了!"</span>,Toast.LENGTH_LONG).show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在AndroidManifest.xml文件中注册(如果使用as自动创建的则自动注册)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;application</span><br><span class="line">        &gt;</span><br><span class="line">        &lt;activity android:name=<span class="string">".MainActivity"</span>&gt;</span><br><span class="line">            &lt;intent-filter&gt;</span><br><span class="line">                &lt;action android:name=<span class="string">"android.intent.action.MAIN"</span> /&gt;</span><br><span class="line"></span><br><span class="line">                &lt;category android:name=<span class="string">"android.intent.category.LAUNCHER"</span> /&gt;</span><br><span class="line">            &lt;/intent-filter&gt;</span><br><span class="line">        &lt;/activity&gt;</span><br><span class="line">        <span class="comment">//广播接收器注册</span></span><br><span class="line">        &lt;receiver android:name=<span class="string">".BootCompleteReceiver"</span></span><br><span class="line">            android:enabled=<span class="string">"true"</span></span><br><span class="line">            android:exported=<span class="string">"true"</span>&gt;</span><br><span class="line">            &lt;intent-filter&gt;</span><br><span class="line">                &lt;action</span><br><span class="line">                    android:name="android.intent.action.BOOT_COMPLETED"&gt;&lt;/action&gt;</span><br><span class="line">            &lt;/intent-filter&gt;</span><br><span class="line">        &lt;/receiver&gt;</span><br><span class="line">    &lt;/application&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h5 id="2-3-发送自定义广播并接收"><a href="#2-3-发送自定义广播并接收" class="headerlink" title="2.3 发送自定义广播并接收"></a>2.3 发送自定义广播并接收</h5><p>自定义的广播使用静态注册</p>
+<h6 id="2-3-1-发送标准广播"><a href="#2-3-1-发送标准广播" class="headerlink" title="2.3.1 发送标准广播"></a>2.3.1 发送标准广播</h6><ol>
+<li>广播接收器注册</li>
+</ol>
+<p>步骤同静态广播接收器一致，不过在AndroidManifest.xml文件中不仅仅注册时，广播接收器的<intent-filter>标签里应该填写自己自定义的广播名<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">&lt;intent-filter&gt;</span><br><span class="line">                &lt;action</span><br><span class="line">                    android:name="com.override0330.example"&gt;&lt;/action&gt;</span><br><span class="line">            &lt;/intent-filter&gt;</span><br><span class="line">......</span><br></pre></td></tr></table></figure></intent-filter></p>
+<ol start="2">
+<li>发送广播-使用Intent发送：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">......Java</span><br><span class="line">Intent intent = new Intent(&quot;com.override0330.example&quot;);</span><br><span class="line">sendBroadcast(intent);</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h6 id="2-3-2-发送有序广播"><a href="#2-3-2-发送有序广播" class="headerlink" title="2.3.2 发送有序广播"></a>2.3.2 发送有序广播</h6><ol>
+<li>广播接收器注册</li>
+</ol>
+<p>步骤同发送标准广播一致，但是多加入一个优先级的设置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">......</span><br><span class="line">&lt;intent-filter android:priority=<span class="string">"98"</span>&gt;<span class="comment">//设置优先级为98，最高为100</span></span><br><span class="line">                &lt;action</span><br><span class="line">                    android:name="com.override0330.example"&gt;&lt;/action&gt;</span><br><span class="line">            &lt;/intent-filter&gt;</span><br><span class="line">......</span><br></pre></td></tr></table></figure></p>
+<ol start="2">
+<li><p>发送有序广播</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent(<span class="string">"com.override0330.example"</span>);</span><br><span class="line">sendOrderBroadcast(intent, <span class="keyword">null</span>);<span class="comment">//null参数为一个与权限相关的字符串，一般情况传入null</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>截断广播</p>
+</li>
+</ol>
+<p>在想要截断的广播接收器的onReceive里使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">abortBroadcast();<span class="comment">//截断该广播</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="3-使用本地广播"><a href="#3-使用本地广播" class="headerlink" title="3.使用本地广播"></a>3.使用本地广播</h3><p>本地广播区别于全局广播，它只在本应用程序中传递，如果掌握了全局广播，那么本地广播的使用是非常简单的。而且貌似本地广播只能使用标准广播。<br>将上图中我们使用的注册广播接收器和发送广播的方法改为使用由LocalBroadcastManager的方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取LocalBroadManage实例</span></span><br><span class="line">LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(<span class="keyword">this</span>);</span><br><span class="line"><span class="comment">//发送本地广播</span></span><br><span class="line">localBroadcastManager.sendBroadcast(intent);</span><br><span class="line"><span class="comment">//注册本地广播接收器</span></span><br><span class="line">localBroadcastManager.registerReceiver(localBroadReceiver,intentFilter);</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>广播的使用还是相当简单的，但是它的底层实现还有待我的研究√</p>
+</article><!-- lincense--><div class="license-wrapper"><p> <span>Author:  </span><a href="Override0330.github.io">Override</a></p><p> <span>Link:  </span><a href="Override0330.github.io/2019/04/13/Android-BroadcastReceiver/">Override0330.github.io/2019/04/13/Android-BroadcastReceiver/</a></p><p> <span>Copyright:  </span><span>All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/3.0">CC BY-NC-SA 3.0</a> unless stating additionally.</span></p></div><div class="post-paginator"><a class="nextSlogan" href="/2019/04/13/KMP/" title="数据结构-KMP模式算法"><span>NextPost ></span><br><span class="nextTitle">数据结构-KMP模式算法</span></a><div class="clear"></div></div><div id="comment"></div></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><div class="toc-wrapper" style="top: 70vh;"><div class="toc-catalog"><i class="fa fa-list"> </i><span>CATALOG</span></div><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-广播分类"><span class="toc-number">1.</span> <span class="toc-text">1. 广播分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-Normal-broadcasts-标准广播"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Normal broadcasts 标准广播</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-Ordered-broadcast-有序广播"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Ordered broadcast 有序广播</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-注册全局广播接收器"><span class="toc-number">2.</span> <span class="toc-text">2. 注册全局广播接收器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-动态注册广播接收器"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 动态注册广播接收器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#接受系统广播"><span class="toc-number">2.1.1.</span> <span class="toc-text">接受系统广播</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-注册静态广播接收器"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 注册静态广播接收器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-1-接受系统广播（开机启动）"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 接受系统广播（开机启动）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-发送自定义广播并接收"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.3 发送自定义广播并接收</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-3-1-发送标准广播"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">2.3.1 发送标准广播</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-3-2-发送有序广播"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">2.3.2 发送有序广播</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-使用本地广播"><span class="toc-number">3.</span> <span class="toc-text">3.使用本地广播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-总结"><span class="toc-number">4.</span> <span class="toc-text">4. 总结</span></a></li></ol></div><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>

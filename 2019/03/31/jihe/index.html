@@ -1,0 +1,157 @@
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="Override"><meta name="renderer" content="webkit"><meta name="copyright" content="Override"><meta name="keywords" content="Override0330"><meta name="description" content="null"><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>Java-集合的简单介绍 · Override's Blog from GitHub</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/Myojyafavicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
+  "use strict";
+  // rel=preload support test
+  if( !w.loadCSS ){
+    w.loadCSS = function(){};
+  }
+  // define on the loadCSS obj
+  var rp = loadCSS.relpreload = {};
+  // rel=preload feature support test
+  // runs once and returns a function for compat purposes
+  rp.support = (function(){
+    var ret;
+    try {
+      ret = w.document.createElement( "link" ).relList.supports( "preload" );
+    } catch (e) {
+      ret = false;
+    }
+    return function(){
+      return ret;
+    };
+  })();
+
+  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+  // then change that media back to its intended value on load
+  rp.bindMediaToggle = function( link ){
+    // remember existing media attr for ultimate state, or default to 'all'
+    var finalMedia = link.media || "all";
+
+    function enableStylesheet(){
+      link.media = finalMedia;
+    }
+
+    // bind load handlers to enable media
+    if( link.addEventListener ){
+      link.addEventListener( "load", enableStylesheet );
+    } else if( link.attachEvent ){
+      link.attachEvent( "onload", enableStylesheet );
+    }
+
+    // Set rel and non-applicable media type to start an async request
+    // note: timeout allows this to happen async to let rendering continue in IE
+    setTimeout(function(){
+      link.rel = "stylesheet";
+      link.media = "only x";
+    });
+    // also enable media after 3 seconds,
+    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+    setTimeout( enableStylesheet, 3000 );
+  };
+
+  // loop through link elements in DOM
+  rp.poly = function(){
+    // double check this to prevent external calls from running
+    if( rp.support() ){
+      return;
+    }
+    var links = w.document.getElementsByTagName( "link" );
+    for( var i = 0; i < links.length; i++ ){
+      var link = links[ i ];
+      // qualify links to those with rel=preload and as=style attrs
+      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+        // prevent rerunning on link
+        link.setAttribute( "data-loadcss", true );
+        // bind listeners to toggle media back
+        rp.bindMediaToggle( link );
+      }
+    }
+  };
+
+  // if unsupported, run the polyfill
+  if( !rp.support() ){
+    // run once at least
+    rp.poly();
+
+    // rerun poly on an interval until onload
+    var run = w.setInterval( rp.poly, 500 );
+    if( w.addEventListener ){
+      w.addEventListener( "load", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    } else if( w.attachEvent ){
+      w.attachEvent( "onload", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    }
+  }
+
+
+  // commonjs
+  if( typeof exports !== "undefined" ){
+    exports.loadCSS = loadCSS;
+  }
+  else {
+    w.loadCSS = loadCSS;
+  }
+}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/Myojya.jpg"></div><!--.profile-saying
+  i.fa.fa-comment
+  .saying--><div class="cxo-profile-inner"><div class="profile-name">Override</div><div class="profile-signature">CQUPT_RedrockMobileStudent</div><div class="friends"><div>FRIENDS</div><span><a href="//github.com/Sajotim" target="_black">大鸽Sajo的GitHub传送门</a></span></div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg3.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">Override的GitHub空间OvO</a></div><div class="intro-nav-label-box"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div></i><div class="clear"></div></section></nav><h1 class="post-title">Java-集合的简单介绍</h1><div class="post-intros"><div class="post-intro-meta"><span class="post-intro-time"><i class="post-intro-calendar fa fa-calendar"></i><span>2019-03-31</span></span></div></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article class="article-entry" id="post"><p>上周极度颓废，很咸鱼，就没有做开发学习的周记，这一周把<strong>Java核心技术卷I</strong>(除了swing等图形界面一块）看完了，然后开始看大话数据结构同时MOOC的数据结构也跟上，那就来总结总结Java里的集合这个和数据结构紧密联系的东西。<br>阅读体验较差可前往掘金：<a href="https://juejin.im/post/5cb0cecc5188251ad87b1685" target="_blank" rel="noopener">https://juejin.im/post/5cb0cecc5188251ad87b1685</a></p>
+<h2 id="1-Java集合框架"><a href="#1-Java集合框架" class="headerlink" title="1. Java集合框架"></a>1. Java集合框架</h2><p>下图来自<strong>Java核心技术卷I(第10版)</strong><br><img src="https://upload-images.jianshu.io/upload_images/15366117-dce2af7c0c0c9f09.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="https://upload-images.jianshu.io/upload_images/15366117-3bcb0f14770a7f47.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="1-1-集合框架的接口"><a href="#1-1-集合框架的接口" class="headerlink" title="1.1 集合框架的接口"></a>1.1 集合框架的接口</h3><p>上面的类看起来非常之多但是你仔细看看后面的单词末尾都会有一些相似的地方，<strong>Java的集合类库将接口和实现分离</strong>。如果你有接口的概念，那么看看下面的图可能就明白了。<br><img src="https://upload-images.jianshu.io/upload_images/15366117-3b0fc0edf2f58d46.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>上图我们可以看到除了Iterator(迭代器)不属于集合类的范畴外，所有的集合类都由两个基本的接口：Collection和Map。</p>
+<h3 id="1-2-Collection接口"><a href="#1-2-Collection接口" class="headerlink" title="1.2 Collection接口"></a>1.2 Collection接口</h3><p><img src="https://upload-images.jianshu.io/upload_images/15366117-d0acf5634a7126a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Collection接口中定义的方法"><br>这些方法非常好理解而且ArrayList里用过了很多，不多赘述。</p>
+<blockquote>
+<p>Tips：只研究蓝色区域内的方法，默认方法不讨论</p>
+</blockquote>
+<h4 id="1-2-1-迭代器"><a href="#1-2-1-迭代器" class="headerlink" title="1.2.1 迭代器"></a>1.2.1 迭代器</h4><p>通过上图的 iterator 方法来返回一个该集合的迭代器。<br>迭代器有什么用呢，我们来看看迭代器接口的方法<br><img src="https://upload-images.jianshu.io/upload_images/15366117-939cc8aa7bb2a3bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="迭代器接口中的方法"><br>方法很少但是在Collection却很重要。不多bb，上图<br><img src="https://upload-images.jianshu.io/upload_images/15366117-072840de84fd258c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="迭代器工作示意图"><br>所以我们有如下的使用方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(Iterable&lt;T&gt; element : c)&#123;</span><br><span class="line">  <span class="comment">// do something with element</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将一个实现了Iterable接口的一个对象传入进行遍历，在这里这个对象就是我们说的实现了Collection接口的对象（因为Collection接口同时实现了Iterable接口）<br>remove方法就是删除 next 方法返回的对象</p>
+<blockquote>
+<p>Tips: 不能连续使用两次remove方法来实现连续删除两个元素，应该使用next方法后再remove</p>
+</blockquote>
+<h4 id="1-2-2-Collection子接口——List"><a href="#1-2-2-Collection子接口——List" class="headerlink" title="1.2.2 Collection子接口——List"></a>1.2.2 Collection子接口——List</h4><p>List是一个有序的集合，访问其中的元素既可以使用迭代器，也可以使用随机访问（即通过制定的索引访问）<br><img src="https://upload-images.jianshu.io/upload_images/15366117-a1500a7a77e8ce78.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="List接口中定义的方法"><br>继承自Collection接口，同时增添一些关于随机访问的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">addAll(index:<span class="keyword">int</span>, c:Collection&lt;? extends E&gt;):<span class="keyword">boolean</span></span><br><span class="line">get(index:<span class="keyword">int</span>):E</span><br><span class="line">set(index:<span class="keyword">int</span>, element:E):E</span><br><span class="line">add(index:<span class="keyword">int</span>, element:E)<span class="keyword">void</span></span><br><span class="line"><span class="comment">//......</span></span><br></pre></td></tr></table></figure></p>
+<p>经常使用ArrayList的同学肯定对这些方法不陌生。</p>
+<h4 id="1-2-3-Collection子接口——Set-集"><a href="#1-2-3-Collection子接口——Set-集" class="headerlink" title="1.2.3 Collection子接口——Set(集)"></a>1.2.3 Collection子接口——Set(集)</h4><p>Set接口等同于Collection接口（没有增添新的方法），不过集(Set)的add方法不允许添加重复的元素。<br><img src="https://upload-images.jianshu.io/upload_images/15366117-db64653a16863599.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Set接口add方法的官方描述，其中指出了Set接口的元素不相同的特性"></p>
+<h4 id="1-2-3-Collection的子接口——Queue-队列"><a href="#1-2-3-Collection的子接口——Queue-队列" class="headerlink" title="1.2.3 Collection的子接口——Queue(队列)"></a>1.2.3 Collection的子接口——Queue(队列)</h4><p>首先我们来看看Queue接口中定义的方法<br><img src="https://upload-images.jianshu.io/upload_images/15366117-bb4d0fd6762d5209.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Queue接口中定义的方法"><br>队列是只允许在一端进行插入操作，而在另一端进行删除操作的线性表。以下列出Queue新增的方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">offer(e:E):<span class="keyword">boolean</span><span class="comment">//在队列尾部添加一个元素</span></span><br><span class="line">remove():E<span class="comment">//删除队列的头元素并返回，没有则抛出NoSuchElementException异常</span></span><br><span class="line">poll():E<span class="comment">//删除队列的头元素并返回，没有则返回null</span></span><br><span class="line">element():E<span class="comment">//返回队列头部元素，没有则抛出NoSuchElementException异常</span></span><br><span class="line">peek():E<span class="comment">//返回队列头部元素，没有则返回null</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="1-3-Map-接口"><a href="#1-3-Map-接口" class="headerlink" title="1.3  Map 接口"></a>1.3  Map 接口</h3><p><img src="https://upload-images.jianshu.io/upload_images/15366117-d712f6dc8cbd8b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Map接口中定义的方法"><br>这些方法和Collection不少有些相似，但是由于和Collection实现的方式有根本上的差异（1.4），所以总体来说还是很不一样的所以分成了两个接口。</p>
+<blockquote>
+<p>Tips：只研究蓝色区域内的方法，默认方法不讨论</p>
+</blockquote>
+<h4 id="1-3-1-Map子接口——SortedMap"><a href="#1-3-1-Map子接口——SortedMap" class="headerlink" title="1.3.1 Map子接口——SortedMap"></a>1.3.1 Map子接口——SortedMap</h4><p>SortedMap是一个可以保证按照键的升序排列的映射，可以按照键的自然顺序（参见 Comparable 接口）进行排序， 或者通过创建有序映射时提供的比较器进行排序。<br>上图：<br><img src="https://upload-images.jianshu.io/upload_images/15366117-d57eb77a358b05f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SortedMap接口中定义的方法"></p>
+<h3 id="1-4-Collection和Map实现的差异"><a href="#1-4-Collection和Map实现的差异" class="headerlink" title="1.4 Collection和Map实现的差异"></a>1.4 Collection和Map实现的差异</h3><p>Collection添加元素的时候一般只需要提供要传入的元素，而Map是需要以键值对的方式(Key/Value)来添加的，一个Key对应一个Value。所以才导致了一些方法的不同</p>
+<h2 id="2-具体的集合-Collection"><a href="#2-具体的集合-Collection" class="headerlink" title="2. 具体的集合(Collection)"></a>2. 具体的集合(Collection)</h2><p><img src="https://upload-images.jianshu.io/upload_images/15366117-dce2af7c0c0c9f09.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br><img src="https://upload-images.jianshu.io/upload_images/15366117-3bcb0f14770a7f47.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>需要指出的是，我们现在所用的集合类都是继承自Abstract+List/Set/Queue/Map抽象类而不是实现了某些接口，但是这些抽象类同样实现了对应的接口，其实还是间接实现了对应的接口，但是使用继承抽象类来实现集合类的话会比较方便。<br>下面介绍<strong>几种常用的集合类</strong>，偏向<strong>介绍特性</strong>一些简单的使用就忽略了。</p>
+<h3 id="2-1-ArrayList"><a href="#2-1-ArrayList" class="headerlink" title="2.1 ArrayList"></a>2.1 ArrayList</h3><ul>
+<li>继承自AbstractList</li>
+<li>根据名字可以理解为一种常用的长度可变的数组(?)</li>
+<li>也是使用的比较多一种集合，使用起来比较简单，方便，不多赘述<h3 id="2-2-LinkedList"><a href="#2-2-LinkedList" class="headerlink" title="2.2 LinkedList"></a>2.2 LinkedList</h3></li>
+<li>继承自AbstractSequentialList</li>
+<li>实际上是一种双向链表(参见 数据结构—链表）</li>
+</ul>
+<p>在C++里我们通过不停地变换指针来到我们需要的节点然后进行增删改查，在Java里，我们使用迭代器来进行增删改查的操作。这里我们使用的迭代器不是原来我们介绍的迭代器，而是另一个，Iterator的子接口ListIterator。<br><img src="https://upload-images.jianshu.io/upload_images/15366117-00b84e6335a61566.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ListIterator"><br>其中有一个新的词Previous(前者)，对比next你就可以理解这些新的方法的含义。所以说Java中的链表默认是双向的（你想自己实现一个单项的也行233333333）<br>简答举例就可以理解：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; food = new LinkedList&lt;&gt;();</span><br><span class="line">        food.add(&quot;翅桶&quot;);</span><br><span class="line">        food.add(&quot;春日全家桶&quot;);</span><br><span class="line">        food.add(&quot;书亦烧仙草&quot;);</span><br><span class="line">        ListIterator&lt;String&gt; listIterator = food.listIterator();</span><br><span class="line">        listIterator.next();//翅桶</span><br><span class="line">        listIterator.add(&quot;重庆鸡公煲&quot;);//翅桶,重庆鸡公煲,春日全家桶,书亦烧仙草</span><br><span class="line">        listIterator.next();//春日全家桶</span><br><span class="line">        listIterator.remove();//翅桶,重庆鸡公煲,书亦烧仙草</span><br><span class="line">        listIterator.previous();//重庆鸡公煲</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-3-ArrayDeque"><a href="#2-3-ArrayDeque" class="headerlink" title="2.3 ArrayDeque"></a>2.3 ArrayDeque</h3><ul>
+<li>继承自AbstractCollection并实现了Deque接口</li>
+<li>是一种用循环数组实现的双端队列<br><img src="https://upload-images.jianshu.io/upload_images/15366117-5c2b4520dcf8ccc2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ArrayDeque实现的部分方法"><br>我们从方法名来看，并比对1.2.3的Deque(队列)接口中的方法，不难看出它的使用方法。实际上就是一个可以从头部添加或者删除的队列，但依然不允许从中间添加或者删除元素，即使有迭代器，并有remove的方法，但是实际上依然remove方法依然是删除头部的元素:<br><img src="https://upload-images.jianshu.io/upload_images/15366117-9df2c4a9955376d0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ArrayDeque中的remove方法"><br>同理，所有继承自Collection的方法所对应的操作都是把它当做普通的队列来操作。<h3 id="2-4-HashSet"><a href="#2-4-HashSet" class="headerlink" title="2.4 HashSet"></a>2.4 HashSet</h3></li>
+<li>继承自AbstractSet</li>
+<li>用来存放没有重复元素的<strong>无序集合</strong></li>
+<li>基于HashMap实现<br><img src="https://upload-images.jianshu.io/upload_images/15366117-a41d5f853e697931.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="AbstractSet的部分方法"><br>巧妙的是，为了做到没有重复元素，该集(Set)底层是通过新建一个HashMap并将元素当做HashMap的key的原理实现的，因为HashMap的key是独一无二的。有关HashMap的描述，后面会讲到。<br>无序集合采用<strong>迭代器</strong>的方式遍历整个元素，无法决定顺序，但是总会遍历完所有的元素。</li>
+</ul>
+<h3 id="2-5-TreeSet"><a href="#2-5-TreeSet" class="headerlink" title="2.5 TreeSet"></a>2.5 TreeSet</h3><ul>
+<li>继承自AbstractSet</li>
+<li>用来存放没有重复元素的<strong>有序集合</strong></li>
+<li>基于<strong>HashTree</strong>实现<br><img src="https://upload-images.jianshu.io/upload_images/15366117-6d865eba3001486e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="TreeSet中的部分方法"><br>first和last返回的是第一和最后一个元素<br>lower返回的是<strong>严格</strong>比给定元素要小的最大元素<br>floor返回的是比给定元素<strong>小于或等于</strong>的最大元素<br>higher返回的是<strong>严格</strong>比给定元素要大的最小元素<br>ceiling返回的是比给顶元素<strong>大于或者等于</strong>的最小元素<br>pollFirst/Last将集(Set)的头部/尾部元素删除(弹出)并返回<br>同样是使用<strong>HashTree</strong>中的key值唯一性来保证没有重复的元素。</li>
+</ul>
+<h2 id="3-具体的映射-Map"><a href="#3-具体的映射-Map" class="headerlink" title="3. 具体的映射(Map)"></a>3. 具体的映射(Map)</h2><blockquote>
+<p>Tips：注意映射和集合</p>
+</blockquote>
+<h3 id="3-1-HashMap"><a href="#3-1-HashMap" class="headerlink" title="3.1 HashMap"></a>3.1 HashMap</h3><ul>
+<li>继承自AbstractMap</li>
+<li>一种储存键值对的<strong>无序</strong>数据结构<br><img src="https://upload-images.jianshu.io/upload_images/15366117-439a7b98b1adadb6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="HashMap包含的部分方法"><br>使用其实也非常容易理解，首先，他是无序的，迭代器访问的时候也是随机、无序的。往HashMap放一个值的时候就要把键(key)值(value)对都传给put方法，想要访问元素的时候呢就需要拿到他的key。还可以通过keySet方法和values方法单独得到key和value的Collection对象。其中关于HashMap更多的细节，我还不是特别清楚，以后会继续讨论√</li>
+<li>对象和key必须是一一对应的，如果你想对自定义类放入HashMap，那你必须重写hashCode方法来生成对象的key，还要重写equals方法以保证两个hashCode相等的对象返回的是false。</li>
+</ul>
+<h3 id="3-2-TreeMap"><a href="#3-2-TreeMap" class="headerlink" title="3.2 TreeMap"></a>3.2 TreeMap</h3><ul>
+<li>继承自AbstractMap</li>
+<li>一种储存键值对的<strong>有序</strong>数据结构</li>
+<li>排序的底层实现为红黑树(red-black tree)<br><img src="https://upload-images.jianshu.io/upload_images/15366117-2a4a49f6152f46e6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="TreeMap的部分方法"><br>使用起来和HashMap看起来差不多，区别就在于一个有序一个无序，迭代器总是能够以排好的顺序依次访问元素。</li>
+</ul>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h2><p>突然不想写了，感觉写这些简单的没什么深度，看了清夏学姐推荐的GitBook发现自己是真的弟。。。。。。<br>从今以后我写的会更加注重深层次的东西，不在于多，而在于深。<br>不多bb，看书去了√</p>
+</article><!-- lincense--><div class="license-wrapper"><p> <span>Author:  </span><a href="Override0330.github.io">Override</a></p><p> <span>Link:  </span><a href="Override0330.github.io/2019/03/31/jihe/">Override0330.github.io/2019/03/31/jihe/</a></p><p> <span>Copyright:  </span><span>All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/3.0">CC BY-NC-SA 3.0</a> unless stating additionally.</span></p></div><div class="post-paginator"><a class="prevSlogan" href="/2019/04/13/KMP/" title="数据结构-KMP模式算法"><span>< PreviousPost</span><br><span class="prevTitle">数据结构-KMP模式算法</span></a><a class="nextSlogan" href="/2019/03/13/git/" title="Git的使用"><span>NextPost ></span><br><span class="nextTitle">Git的使用</span></a><div class="clear"></div></div><div id="comment"></div></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><div class="toc-wrapper" style="top: 70vh;"><div class="toc-catalog"><i class="fa fa-list"> </i><span>CATALOG</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Java集合框架"><span class="toc-number">1.</span> <span class="toc-text">1. Java集合框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-集合框架的接口"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 集合框架的接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Collection接口"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Collection接口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-迭代器"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.2.1 迭代器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-Collection子接口——List"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2.2 Collection子接口——List</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-3-Collection子接口——Set-集"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.2.3 Collection子接口——Set(集)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-3-Collection的子接口——Queue-队列"><span class="toc-number">1.2.4.</span> <span class="toc-text">1.2.3 Collection的子接口——Queue(队列)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-Map-接口"><span class="toc-number">1.3.</span> <span class="toc-text">1.3  Map 接口</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-Map子接口——SortedMap"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.1 Map子接口——SortedMap</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-Collection和Map实现的差异"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 Collection和Map实现的差异</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-具体的集合-Collection"><span class="toc-number">2.</span> <span class="toc-text">2. 具体的集合(Collection)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-ArrayList"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 ArrayList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-LinkedList"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 LinkedList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-ArrayDeque"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 ArrayDeque</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-HashSet"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 HashSet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-TreeSet"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 TreeSet</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-具体的映射-Map"><span class="toc-number">3.</span> <span class="toc-text">3. 具体的映射(Map)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-HashMap"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 HashMap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-TreeMap"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 TreeMap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-总结"><span class="toc-number">4.</span> <span class="toc-text">3.总结</span></a></li></ol></div><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>
