@@ -1,102 +1,309 @@
-<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="Override"><meta name="renderer" content="webkit"><meta name="copyright" content="Override"><meta name="keywords" content="Override0330"><meta name="description" content="null"><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>Override's Blog from GitHub</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/Myojyafavicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
-  "use strict";
-  // rel=preload support test
-  if( !w.loadCSS ){
-    w.loadCSS = function(){};
-  }
-  // define on the loadCSS obj
-  var rp = loadCSS.relpreload = {};
-  // rel=preload feature support test
-  // runs once and returns a function for compat purposes
-  rp.support = (function(){
-    var ret;
-    try {
-      ret = w.document.createElement( "link" ).relList.supports( "preload" );
-    } catch (e) {
-      ret = false;
-    }
-    return function(){
-      return ret;
-    };
-  })();
+<!DOCTYPE html>
+<html lang=>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+    <link rel="icon" href="/favicon.ico">
+  
+    
+  <title>Override0330</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/lib/jquery.fancybox.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 
-  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-  // then change that media back to its intended value on load
-  rp.bindMediaToggle = function( link ){
-    // remember existing media attr for ultimate state, or default to 'all'
-    var finalMedia = link.media || "all";
+<body>
+  <header>
+  <div class="header-container">
+    <a class="logo" href="/">
+      <span>Override0330</span>
+    </a>
+    <ul class="right-header">
+      
+        <li class="nav-item">
+          
+            <a href="/" class="item-link active">首页</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/about" class="item-link">关于</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/archives" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/tags" class="item-link">标签</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+</header>
 
-    function enableStylesheet(){
-      link.media = finalMedia;
-    }
+  <main id="index">
+  <div class="posts-list">
+    
+      <section>
+        <a href="/2019/04/13/Android-BroadcastReceiver/">
+          <h3 class="post-head">
+            Android-Broadcast Receiver(广播接收器)
+          </h3>
+        </a>
+        
+        <div class="post-content">
+          
+            
+              
+                <p>简单记录Broadcast Receiver(广播接收器)的简单实用<br>掘金：<a href="https://juejin.im/post/5cb0cf5de51d456e5633ddc5" target="_blank" rel="noopener">https://juejin.im/post/5cb0cf5de51d456e5633ddc5</a></p>
+              
+          
+        </div>
+        <div class="post-meta">
+          <i class="fa fa-calendar" aria-hidden="true"></i> <time>2019/04/13</time>
+          
+          
+        </div>
+      </section>
+    
+      <section>
+        <a href="/2019/04/13/KMP/">
+          <h3 class="post-head">
+            数据结构-KMP模式算法
+          </h3>
+        </a>
+        
+        <div class="post-content">
+          
+            
+              
+                <p>最近很久没有看Java的知识了，都在看看数据结构，一连看了一周，数据结构理解不难，但是真正的算法理解还是比较困难的，所以开一个坑。接下来会继续更新其他算法，线性表貌似只涉及这一个算法233333<br>掘金：<a href="https://juejin.im/post/5cb0cf34e51d456e71408592" target="_blank" rel="noopener">https://juejin.im/post/5cb0cf34e51d456e71408592</a></p>
+              
+          
+        </div>
+        <div class="post-meta">
+          <i class="fa fa-calendar" aria-hidden="true"></i> <time>2019/04/13</time>
+          
+          
+        </div>
+      </section>
+    
+      <section>
+        <a href="/2019/03/31/jihe/">
+          <h3 class="post-head">
+            Java-集合的简单介绍
+          </h3>
+        </a>
+        
+        <div class="post-content">
+          
+            
+              
+                <p>上周极度颓废，很咸鱼，就没有做开发学习的周记，这一周把<strong>Java核心技术卷I</strong>(除了swing等图形界面一块）看完了，然后开始看大话数据结构同时MOOC的数据结构也跟上，那就来总结总结Java里的集合这个和数据结构紧密联系的东西。<br>阅读体验较差可前往掘金：<a href="https://juejin.im/post/5cb0cecc5188251ad87b1685" target="_blank" rel="noopener">https://juejin.im/post/5cb0cecc5188251ad87b1685</a></p>
+              
+          
+        </div>
+        <div class="post-meta">
+          <i class="fa fa-calendar" aria-hidden="true"></i> <time>2019/03/31</time>
+          
+          
+        </div>
+      </section>
+    
+      <section>
+        <a href="/2019/03/13/git/">
+          <h3 class="post-head">
+            Git的使用
+          </h3>
+        </a>
+        
+        <div class="post-content">
+          
+            
+              
+                <p>这篇就算在这一周的学习笔记里吧😆</p>
+              
+          
+        </div>
+        <div class="post-meta">
+          <i class="fa fa-calendar" aria-hidden="true"></i> <time>2019/03/13</time>
+          
+          
+        </div>
+      </section>
+    
+      <section>
+        <a href="/2019/03/12/ThreadPool/">
+          <h3 class="post-head">
+            java中的四种线程池
+          </h3>
+        </a>
+        
+        <div class="post-content">
+          
+            
+              
+                <p>2019.03.09Android学习周记——java中的四种线程池<br>简书地址：<br><a href="https://www.jianshu.com/p/f7c1544c2638" target="_blank" rel="noopener">https://www.jianshu.com/p/f7c1544c2638</a></p>
+              
+          
+        </div>
+        <div class="post-meta">
+          <i class="fa fa-calendar" aria-hidden="true"></i> <time>2019/03/12</time>
+          
+          
+        </div>
+      </section>
+    
+      <section>
+        <a href="/2019/03/12/接口回调/">
+          <h3 class="post-head">
+            初步理解接口回调
+          </h3>
+        </a>
+        
+        <div class="post-content">
+          
+            
+              
+                <p>2019.03.09Android学习周记——初步理解接口回调<br>本文将通过自己的理解来一步一步浅层讲解接口回调<br>简书地址：<br><a href="https://www.jianshu.com/p/90190489fea7" target="_blank" rel="noopener">https://www.jianshu.com/p/90190489fea7</a></p>
+              
+          
+        </div>
+        <div class="post-meta">
+          <i class="fa fa-calendar" aria-hidden="true"></i> <time>2019/03/12</time>
+          
+          
+        </div>
+      </section>
+    
+      <section>
+        <a href="/2019/03/03/Android_2019_03_03/">
+          <h3 class="post-head">
+            Android开发学习-2019.03.03
+          </h3>
+        </a>
+        
+        <div class="post-content">
+          
+            
+              
+                <h2 id="昨晚进行了红岩网校的寒假考核作业展示，发现在很多地方还是不如别人，和学长学姐交流了一下，还是需要多多看书学习。因此，我开通了简书来来每一周总结自己学习的知识，以监督自己。然后同步到github的博客上√"><a href="#昨晚进行了红岩网校的寒假考核作业展示，发现在很多地方还是不如别人，和学长学姐交流了一下，还是需要多多看书学习。因此，我开通了简书来来每一周总结自己学习的知识，以监督自己。然后同步到github的博客上√" class="headerlink" title="昨晚进行了红岩网校的寒假考核作业展示，发现在很多地方还是不如别人，和学长学姐交流了一下，还是需要多多看书学习。因此，我开通了简书来来每一周总结自己学习的知识，以监督自己。然后同步到github的博客上√"></a>昨晚进行了红岩网校的寒假考核作业展示，发现在很多地方还是不如别人，和学长学姐交流了一下，还是需要多多看书学习。因此，我开通了简书来来每一周总结自己学习的知识，以监督自己。然后同步到github的博客上√</h2><blockquote>
+              
+          
+        </blockquote></div>
+        <div class="post-meta">
+          <i class="fa fa-calendar" aria-hidden="true"></i> <time>2019/03/03</time>
+          
+          
+        </div>
+      </section>
+    
+      <section>
+        <a href="/2018/12/13/interface/">
+          <h3 class="post-head">
+            Java接口回调的自我理解
+          </h3>
+        </a>
+        
+        <div class="post-content">
+          
+            
+              
+                <p>在近期做获取通话记录的app的时候，设置RecycleView的每一个item的单击时间监听器的时候卡了很久（wtcl），因为涉及到接口回调，特此开一篇博客来说说自己的理解，以加深对这个抽象概念的认识。</p>
+              
+          
+        </div>
+        <div class="post-meta">
+          <i class="fa fa-calendar" aria-hidden="true"></i> <time>2018/12/13</time>
+          
+          
+        </div>
+      </section>
+    
+      <section>
+        <a href="/2018/11/01/creathexo/">
+          <h3 class="post-head">
+            如何搭建基于GitHub的Hexo博客(Mac)
+          </h3>
+        </a>
+        
+        <div class="post-content">
+          
+            
+              
+                <p>第一篇博客不知道要写什么,不如记录下这个基于GitHub的博客的完整搭建过程=。=           </p>
+              
+          
+        </div>
+        <div class="post-meta">
+          <i class="fa fa-calendar" aria-hidden="true"></i> <time>2018/11/01</time>
+          
+          
+        </div>
+      </section>
+    
+  </div>
+  <aside>
+    
+    <div class="search">
+      <div class="content">
+        <form action="//www.google.com/search" target="_blank" class="search-form">
+          <input type="text" name="q" maxlength="20" placeholder="Search">
+          <input type="hidden" name="sitesearch" value="Override0330.github.io">
+        </form>
+      </div>
+    </div>
+    
+    
+      <div class="avatar">
+        <img src="https://upload.jianshu.io/users/upload_avatars/15366117/419c97cc-d9aa-486b-9ded-3c06463a992e.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240" alt="avatar">
+          
+            <div class="content">
+                <span>重庆邮电大学红岩网校移动开发部 学员</span>
+            </div>
+          
+      </div>
+    
+    
+    
+      <div class="links">
+        <h1>
+          Blogroll
+        </h1>
+        <div class="content">
+          
+            <a href="https://www.google.com/" target="_blank">谷歌</a>
+          
+        </div>
+      </div>
+    
+  </aside>
+</main>
 
-    // bind load handlers to enable media
-    if( link.addEventListener ){
-      link.addEventListener( "load", enableStylesheet );
-    } else if( link.attachEvent ){
-      link.attachEvent( "onload", enableStylesheet );
-    }
 
-    // Set rel and non-applicable media type to start an async request
-    // note: timeout allows this to happen async to let rendering continue in IE
-    setTimeout(function(){
-      link.rel = "stylesheet";
-      link.media = "only x";
-    });
-    // also enable media after 3 seconds,
-    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-    setTimeout( enableStylesheet, 3000 );
-  };
-
-  // loop through link elements in DOM
-  rp.poly = function(){
-    // double check this to prevent external calls from running
-    if( rp.support() ){
-      return;
-    }
-    var links = w.document.getElementsByTagName( "link" );
-    for( var i = 0; i < links.length; i++ ){
-      var link = links[ i ];
-      // qualify links to those with rel=preload and as=style attrs
-      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
-        // prevent rerunning on link
-        link.setAttribute( "data-loadcss", true );
-        // bind listeners to toggle media back
-        rp.bindMediaToggle( link );
-      }
-    }
-  };
-
-  // if unsupported, run the polyfill
-  if( !rp.support() ){
-    // run once at least
-    rp.poly();
-
-    // rerun poly on an interval until onload
-    var run = w.setInterval( rp.poly, 500 );
-    if( w.addEventListener ){
-      w.addEventListener( "load", function(){
-        rp.poly();
-        w.clearInterval( run );
-      } );
-    } else if( w.attachEvent ){
-      w.attachEvent( "onload", function(){
-        rp.poly();
-        w.clearInterval( run );
-      } );
-    }
-  }
+  <footer>
+  <div class="copyright">
+    <div>
+      &copy; 2019 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a>&nbsp
+    </div>
+    <div>
+      Theme by <a href="https://github.com/lewis-geek/hexo-theme-Aath" target="_blank">Aath</a>
+    </div>
+  </div>
+</footer>
 
 
-  // commonjs
-  if( typeof exports !== "undefined" ){
-    exports.loadCSS = loadCSS;
-  }
-  else {
-    w.loadCSS = loadCSS;
-  }
-}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/Myojya.jpg"></div><!--.profile-saying
-  i.fa.fa-comment
-  .saying--><div class="cxo-profile-inner"><div class="profile-name">Override</div><div class="profile-signature">CQUPT_RedrockMobileStudent</div><div class="friends"><div>FRIENDS</div><span><a href="//github.com/Sajotim" target="_black">大鸽Sajo的GitHub传送门</a></span></div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg3.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">Override的GitHub空间OvO</a></div><div class="intro-nav-label-box"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div></i><div class="clear"></div></section></nav><h1>Override的GitHub空间OvO</h1><h5>欢迎来到我的Blog鸭=。=</h5><div class="intro-social"><a class="fa fa-envelope" href="mailto:854098072@qq.com" title="email"></a><a class="fa fa-github" href="//github.com/Override0330" target="_blank" title="github"></a></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><section id="recent-posts"><div class="recent-post-item"><div class="post-title"><a href="/2019/04/13/Android-BroadcastReceiver/">Android-Broadcast Receiver(广播接收器)</a></div><div class="post-time"><i class="fa fa-table"></i><time datetime="2019-04-12T18:04:19.562Z">2019-04-13</time></div><div class="recent-post-content">简单记录Broadcast Receiver(广播接收器)的简单实用掘金：https://jueji ...</div><div class="read-more"><a class="more" href="/2019/04/13/Android-BroadcastReceiver/#more">ReadMore</a></div><hr></div><div class="recent-post-item"><div class="post-title"><a href="/2019/04/13/KMP/">数据结构-KMP模式算法</a></div><div class="post-time"><i class="fa fa-table"></i><time datetime="2019-04-12T18:00:40.386Z">2019-04-13</time></div><div class="recent-post-content">最近很久没有看Java的知识了，都在看看数据结构，一连看了一周，数据结构理解不难，但是真正的算法理解 ...</div><div class="read-more"><a class="more" href="/2019/04/13/KMP/#more">ReadMore</a></div><hr></div><div class="recent-post-item"><div class="post-title"><a href="/2019/03/31/jihe/">Java-集合的简单介绍</a></div><div class="post-time"><i class="fa fa-table"></i><time datetime="2019-03-30T17:51:28.000Z">2019-03-31</time></div><div class="recent-post-content">上周极度颓废，很咸鱼，就没有做开发学习的周记，这一周把Java核心技术卷I(除了swing等图形界面 ...</div><div class="read-more"><a class="more" href="/2019/03/31/jihe/#more">ReadMore</a></div><hr></div><div class="recent-post-item"><div class="post-title"><a href="/2019/03/13/git/">Git的使用</a></div><div class="post-time"><i class="fa fa-table"></i><time datetime="2019-03-12T19:07:42.049Z">2019-03-13</time></div><div class="recent-post-content">这篇就算在这一周的学习笔记里吧😆
-本文在我的Github上体验不佳,等我换了主题应该会好很多
-推荐 ...</div><div class="read-more"><a class="more" href="/2019/03/13/git/#more">ReadMore</a></div><hr></div><div class="recent-post-item"><div class="post-title"><a href="/2019/03/12/ThreadPool/">java中的四种线程池</a></div><div class="post-time"><i class="fa fa-table"></i><time datetime="2019-03-12T13:25:05.054Z">2019-03-12</time></div><div class="recent-post-content">2019.03.09Android学习周记——java中的四种线程池简书地址：https://www ...</div><div class="read-more"><a class="more" href="/2019/03/12/ThreadPool/#more">ReadMore</a></div><hr></div><div class="recent-post-item"><div class="post-title"><a href="/2019/03/12/接口回调/">初步理解接口回调</a></div><div class="post-time"><i class="fa fa-table"></i><time datetime="2019-03-12T13:08:53.000Z">2019-03-12</time></div><div class="recent-post-content">2019.03.09Android学习周记——初步理解接口回调本文将通过自己的理解来一步一步浅层讲解 ...</div><div class="read-more"><a class="more" href="/2019/03/12/接口回调/#more">ReadMore</a></div><hr></div><div class="recent-post-item"><div class="post-title"><a href="/2019/03/03/Android_2019_03_03/">Android开发学习-2019.03.03</a></div><div class="post-time"><i class="fa fa-table"></i><time datetime="2019-03-03T07:29:04.000Z">2019-03-03</time></div><div class="recent-post-content">昨晚进行了红岩网校的寒假考核作业展示，发现在很多地方还是不如别人，和学长学姐交流了一下，还是需要多多 ...</div><div class="read-more"><a class="more" href="/2019/03/03/Android_2019_03_03/#more">ReadMore</a></div><hr></div><div class="recent-post-item"><div class="post-title"><a href="/2018/12/13/interface/">Java接口回调的自我理解</a></div><div class="post-time"><i class="fa fa-table"></i><time datetime="2018-12-13T02:46:19.966Z">2018-12-13</time></div><div class="recent-post-content">在近期做获取通话记录的app的时候，设置RecycleView的每一个item的单击时间监听器的时候 ...</div><div class="read-more"><a class="more" href="/2018/12/13/interface/#more">ReadMore</a></div><hr></div><div class="recent-post-item"><div class="post-title"><a href="/2018/11/01/creathexo/">如何搭建基于GitHub的Hexo博客(Mac)</a></div><div class="post-time"><i class="fa fa-table"></i><time datetime="2018-10-31T17:05:02.000Z">2018-11-01</time></div><div class="recent-post-content">第一篇博客不知道要写什么,不如记录下这个基于GitHub的博客的完整搭建过程=。=          ...</div><div class="read-more"><a class="more" href="/2018/11/01/creathexo/#more">ReadMore</a></div><hr></div></section><nav class="cxo-page-nav"><span class="page-number current">1</span></nav></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>
+
+</body>
+</html>

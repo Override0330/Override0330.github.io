@@ -1,103 +1,68 @@
-<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="Override"><meta name="renderer" content="webkit"><meta name="copyright" content="Override"><meta name="keywords" content="Override0330"><meta name="description" content="null"><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>Git的使用 · Override's Blog from GitHub</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/Myojyafavicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
-  "use strict";
-  // rel=preload support test
-  if( !w.loadCSS ){
-    w.loadCSS = function(){};
-  }
-  // define on the loadCSS obj
-  var rp = loadCSS.relpreload = {};
-  // rel=preload feature support test
-  // runs once and returns a function for compat purposes
-  rp.support = (function(){
-    var ret;
-    try {
-      ret = w.document.createElement( "link" ).relList.supports( "preload" );
-    } catch (e) {
-      ret = false;
-    }
-    return function(){
-      return ret;
-    };
-  })();
+<!DOCTYPE html>
+<html lang=>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+    <link rel="icon" href="/favicon.ico">
+  
+    
+  <title>Git的使用 | Override0330</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/lib/jquery.fancybox.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 
-  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
-  // then change that media back to its intended value on load
-  rp.bindMediaToggle = function( link ){
-    // remember existing media attr for ultimate state, or default to 'all'
-    var finalMedia = link.media || "all";
+<body>
+  <header>
+  <div class="header-container">
+    <a class="logo" href="/">
+      <span>Override0330</span>
+    </a>
+    <ul class="right-header">
+      
+        <li class="nav-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/about" class="item-link">关于</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/archives" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/tags" class="item-link">标签</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+</header>
 
-    function enableStylesheet(){
-      link.media = finalMedia;
-    }
-
-    // bind load handlers to enable media
-    if( link.addEventListener ){
-      link.addEventListener( "load", enableStylesheet );
-    } else if( link.attachEvent ){
-      link.attachEvent( "onload", enableStylesheet );
-    }
-
-    // Set rel and non-applicable media type to start an async request
-    // note: timeout allows this to happen async to let rendering continue in IE
-    setTimeout(function(){
-      link.rel = "stylesheet";
-      link.media = "only x";
-    });
-    // also enable media after 3 seconds,
-    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
-    setTimeout( enableStylesheet, 3000 );
-  };
-
-  // loop through link elements in DOM
-  rp.poly = function(){
-    // double check this to prevent external calls from running
-    if( rp.support() ){
-      return;
-    }
-    var links = w.document.getElementsByTagName( "link" );
-    for( var i = 0; i < links.length; i++ ){
-      var link = links[ i ];
-      // qualify links to those with rel=preload and as=style attrs
-      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
-        // prevent rerunning on link
-        link.setAttribute( "data-loadcss", true );
-        // bind listeners to toggle media back
-        rp.bindMediaToggle( link );
-      }
-    }
-  };
-
-  // if unsupported, run the polyfill
-  if( !rp.support() ){
-    // run once at least
-    rp.poly();
-
-    // rerun poly on an interval until onload
-    var run = w.setInterval( rp.poly, 500 );
-    if( w.addEventListener ){
-      w.addEventListener( "load", function(){
-        rp.poly();
-        w.clearInterval( run );
-      } );
-    } else if( w.attachEvent ){
-      w.attachEvent( "onload", function(){
-        rp.poly();
-        w.clearInterval( run );
-      } );
-    }
-  }
-
-
-  // commonjs
-  if( typeof exports !== "undefined" ){
-    exports.loadCSS = loadCSS;
-  }
-  else {
-    w.loadCSS = loadCSS;
-  }
-}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/Myojya.jpg"></div><!--.profile-saying
-  i.fa.fa-comment
-  .saying--><div class="cxo-profile-inner"><div class="profile-name">Override</div><div class="profile-signature">CQUPT_RedrockMobileStudent</div><div class="friends"><div>FRIENDS</div><span><a href="//github.com/Sajotim" target="_black">大鸽Sajo的GitHub传送门</a></span></div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg3.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">Override的GitHub空间OvO</a></div><div class="intro-nav-label-box"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">主页</a><a href="/about/">关于</a><a href="/archives/">时间轴</a></div></i><div class="clear"></div></section></nav><h1 class="post-title">Git的使用</h1><div class="post-intros"><div class="post-intro-meta"><span class="post-intro-time"><i class="post-intro-calendar fa fa-calendar"></i><span>2019-03-13</span></span></div></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article class="article-entry" id="post"><p>这篇就算在这一周的学习笔记里吧😆</p>
+  <main id="post">
+  <div class="content">
+    <article>
+        <section class="content markdown-body">
+          <h1>Git的使用</h1>
+          <div class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> <time>2019/03/13</time>
+            
+            
+          </div>
+          <p>这篇就算在这一周的学习笔记里吧😆</p>
 <p>本文在我的Github上体验不佳,等我换了主题应该会好很多</p>
 <p>推荐去简书查看原文</p>
 <p>简书地址：<a href="https://www.jianshu.com/p/c5fb9f2dbb75" target="_blank" rel="noopener">https://www.jianshu.com/p/c5fb9f2dbb75</a></p>
@@ -293,4 +258,165 @@
 <p><strong>Git分支:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//创建分支</span><br><span class="line">$ git branch &lt;branchName&gt;</span><br><span class="line">//切换到分支</span><br><span class="line">$ git checkout &lt;branchName&gt;</span><br><span class="line">//创建并切换到分支</span><br><span class="line">$ git checkout -b &lt;branchName&gt;</span><br><span class="line">//删除分支</span><br><span class="line">$ git branch -d &lt;branchName&gt;</span><br><span class="line">//查看分支列表</span><br><span class="line">$ git branch</span><br><span class="line">//版本退回</span><br><span class="line">$ git reset --hard HEAD^</span><br><span class="line">//将目标分支合并到当前分支默认使用Fast-forward</span><br><span class="line">$ git merge &lt;branchName&gt;</span><br><span class="line">//将目标分支合并到当前分支不使用Fast-forward</span><br><span class="line">$ git merge --no-ff -m &quot;info&quot; &lt;branchName&gt;</span><br><span class="line">//查看分支图</span><br><span class="line">$ git log --graph --pretty=oneline --abbrev-commit</span><br></pre></td></tr></table></figure></p>
 <p><strong>远程仓库：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//克隆目标Git仓库</span><br><span class="line">$ git clone &lt;HttpsUrl/ssh&gt;</span><br><span class="line">//将当前的Git仓库和远程仓库链接</span><br><span class="line">$ git remote add &lt;远程仓库名称&gt; &lt;HttpsUrl/ssh&gt;</span><br><span class="line">//将当前分支推送到远程仓库</span><br><span class="line">$ git push</span><br><span class="line">$ git push &lt;远程仓库名&gt; &lt;branchName&gt;</span><br><span class="line">$ git push -u &lt;远程仓库名&gt; &lt;branchName&gt;</span><br><span class="line">//新建本地分支和并和远程仓库的对应分支连接</span><br><span class="line">$ git checkout -b &lt;本地分支名&gt; &lt;远程仓库名&gt;/&lt;远程分支名&gt;</span><br><span class="line">//在远程仓库中新建新的分支并和当前的本地分支相连接</span><br><span class="line">$ git push --set-upstream &lt;远程仓库名&gt; &lt;新建的远程分支名&gt;</span><br><span class="line">//解决合并冲突</span><br><span class="line">$ git pull</span><br><span class="line">//让分支图变得整洁好看</span><br><span class="line">$ git rebase</span><br></pre></td></tr></table></figure></p>
 <p><strong>标签使用：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//给当前branch的最新commit加标签</span><br><span class="line">$ git tag &lt;tag&gt;</span><br><span class="line">//给之前的commit加标签</span><br><span class="line">$ git tag &lt;tag&gt; &lt;commitId&gt;</span><br><span class="line">//显示当前分支所有commit的id</span><br><span class="line">$ git log --pretty=oneline --abbrev-commit</span><br><span class="line">//显示该分支下的所有标签</span><br><span class="line">$ git tag</span><br><span class="line">//删除标签</span><br><span class="line">$ git tag -d &lt;tag&gt;</span><br><span class="line">//获取某个标签所对应的commit的详细信息</span><br><span class="line">$ git show &lt;tag&gt;</span><br><span class="line">//将标签推送到远程仓库</span><br><span class="line">$ git push &lt;远程仓库名&gt; &lt;tag&gt;</span><br><span class="line">$ git push &lt;远程仓库名&gt; --tags</span><br><span class="line">//删除远程标签，请先在本地删除</span><br><span class="line">$ git push &lt;远程仓库名&gt; :refs/tags/&lt;tag&gt;</span><br></pre></td></tr></table></figure></p>
-</article><!-- lincense--><div class="license-wrapper"><p> <span>Author:  </span><a href="Override0330.github.io">Override</a></p><p> <span>Link:  </span><a href="Override0330.github.io/2019/03/13/git/">Override0330.github.io/2019/03/13/git/</a></p><p> <span>Copyright:  </span><span>All articles in this blog are licensed under <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/3.0">CC BY-NC-SA 3.0</a> unless stating additionally.</span></p></div><div class="post-paginator"><a class="prevSlogan" href="/2019/03/31/jihe/" title="Java-集合的简单介绍"><span>< PreviousPost</span><br><span class="prevTitle">Java-集合的简单介绍</span></a><a class="nextSlogan" href="/2019/03/12/ThreadPool/" title="java中的四种线程池"><span>NextPost ></span><br><span class="nextTitle">java中的四种线程池</span></a><div class="clear"></div></div><div id="comment"></div></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><div class="toc-wrapper" style="top: 70vh;"><div class="toc-catalog"><i class="fa fa-list"> </i><span>CATALOG</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Git的由来"><span class="toc-number">1.</span> <span class="toc-text">1. Git的由来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Git的结构"><span class="toc-number">2.</span> <span class="toc-text">2. Git的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-分布式"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 分布式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-仓库结构"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 仓库结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-工作区"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 工作区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-代码库"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 代码库</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-面向修改的Git"><span class="toc-number">3.</span> <span class="toc-text">3. 面向修改的Git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-创建一个Git仓库"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 创建一个Git仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-提交文件到暂存区"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 提交文件到暂存区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-提交文件到分支"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 提交文件到分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-commit的是修改而不是文件"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 commit的是修改而不是文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-撤销修改"><span class="toc-number">4.</span> <span class="toc-text">3.5 撤销修改</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-文件删除"><span class="toc-number">4.0.1.</span> <span class="toc-text">3.6 文件删除</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Git分支"><span class="toc-number">5.</span> <span class="toc-text">4. Git分支</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-单分支结构"><span class="toc-number">5.1.</span> <span class="toc-text">4.1 单分支结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-版本退回"><span class="toc-number">5.2.</span> <span class="toc-text">4.2 版本退回</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-多分支结构"><span class="toc-number">5.3.</span> <span class="toc-text">4.3 多分支结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-创建新的分支"><span class="toc-number">5.3.1.</span> <span class="toc-text">4.3.1 创建新的分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-合并分支-使用Fast-forward"><span class="toc-number">5.3.2.</span> <span class="toc-text">4.3.2 合并分支(使用Fast-forward)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-分支冲突解决"><span class="toc-number">5.4.</span> <span class="toc-text">4.4 分支冲突解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-合并分支-不使用Fast-forward"><span class="toc-number">5.5.</span> <span class="toc-text">4.5 合并分支(不使用Fast-forward)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-分支策略"><span class="toc-number">5.6.</span> <span class="toc-text">4.6 分支策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-分支的妙用"><span class="toc-number">5.7.</span> <span class="toc-text">4.7 分支的妙用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-7-1-Bug分支"><span class="toc-number">5.7.1.</span> <span class="toc-text">4.7.1 Bug分支</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-使用GitHub进行多人协作"><span class="toc-number">6.</span> <span class="toc-text">5. 使用GitHub进行多人协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-链接到远程仓库-Github"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 链接到远程仓库(Github)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-将分支推送到Github"><span class="toc-number">6.2.</span> <span class="toc-text">5.2 将分支推送到Github</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-远程仓库的分支技巧"><span class="toc-number">6.3.</span> <span class="toc-text">5.3 远程仓库的分支技巧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-从远程仓库中clone"><span class="toc-number">6.4.</span> <span class="toc-text">5.4 从远程仓库中clone</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-在远程仓库中创建新的分支"><span class="toc-number">6.5.</span> <span class="toc-text">5.6 在远程仓库中创建新的分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-远程仓库的分支合并冲突"><span class="toc-number">6.6.</span> <span class="toc-text">5.5 远程仓库的分支合并冲突</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-使用Rebase来解决分支太乱的问题"><span class="toc-number">6.7.</span> <span class="toc-text">5.6 使用Rebase来解决分支太乱的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-给commit打上标签-tag"><span class="toc-number">6.8.</span> <span class="toc-text">5.7 给commit打上标签(tag)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-7-1-在本地打标签"><span class="toc-number">6.8.1.</span> <span class="toc-text">5.7.1 在本地打标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-7-2-在远程仓库打标签"><span class="toc-number">6.8.2.</span> <span class="toc-text">5.7.2 在远程仓库打标签</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-小结"><span class="toc-number">7.</span> <span class="toc-text">6. 小结</span></a></li></div><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>
+
+        </section>
+    </article>
+    
+        <!-- disqus 评论框 start -->
+        <div class="comment">
+            <div id="disqus_thread" class="disqus-thread">
+              <i>Loading comments box needs to over the wall</i>
+            </div>
+        </div>
+        <!-- disqus 评论框 end -->
+    
+    
+        <!-- livere 评论框 start -->
+        <div class="comment">
+            <div id="lv-container" data-id="city" data-uid="41000"></div>
+        </div>
+        <!-- livere 评论框 end -->
+        
+  </div>
+  <aside>
+    
+    <div class="toc-container">
+        <h1>目录</h1>
+        <div class="content">
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Git的由来"><span class="toc-number">1.</span> <span class="toc-text">1. Git的由来</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Git的结构"><span class="toc-number">2.</span> <span class="toc-text">2. Git的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-分布式"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 分布式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-仓库结构"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 仓库结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-工作区"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 工作区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-代码库"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 代码库</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-面向修改的Git"><span class="toc-number">3.</span> <span class="toc-text">3. 面向修改的Git</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-创建一个Git仓库"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 创建一个Git仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-提交文件到暂存区"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 提交文件到暂存区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-提交文件到分支"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 提交文件到分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-commit的是修改而不是文件"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 commit的是修改而不是文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-撤销修改"><span class="toc-number">4.</span> <span class="toc-text">3.5 撤销修改</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-文件删除"><span class="toc-number">4.0.1.</span> <span class="toc-text">3.6 文件删除</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Git分支"><span class="toc-number">5.</span> <span class="toc-text">4. Git分支</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-单分支结构"><span class="toc-number">5.1.</span> <span class="toc-text">4.1 单分支结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-版本退回"><span class="toc-number">5.2.</span> <span class="toc-text">4.2 版本退回</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-多分支结构"><span class="toc-number">5.3.</span> <span class="toc-text">4.3 多分支结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-创建新的分支"><span class="toc-number">5.3.1.</span> <span class="toc-text">4.3.1 创建新的分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-合并分支-使用Fast-forward"><span class="toc-number">5.3.2.</span> <span class="toc-text">4.3.2 合并分支(使用Fast-forward)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-分支冲突解决"><span class="toc-number">5.4.</span> <span class="toc-text">4.4 分支冲突解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-合并分支-不使用Fast-forward"><span class="toc-number">5.5.</span> <span class="toc-text">4.5 合并分支(不使用Fast-forward)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-分支策略"><span class="toc-number">5.6.</span> <span class="toc-text">4.6 分支策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-分支的妙用"><span class="toc-number">5.7.</span> <span class="toc-text">4.7 分支的妙用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-7-1-Bug分支"><span class="toc-number">5.7.1.</span> <span class="toc-text">4.7.1 Bug分支</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-使用GitHub进行多人协作"><span class="toc-number">6.</span> <span class="toc-text">5. 使用GitHub进行多人协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-链接到远程仓库-Github"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 链接到远程仓库(Github)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-将分支推送到Github"><span class="toc-number">6.2.</span> <span class="toc-text">5.2 将分支推送到Github</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-远程仓库的分支技巧"><span class="toc-number">6.3.</span> <span class="toc-text">5.3 远程仓库的分支技巧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-从远程仓库中clone"><span class="toc-number">6.4.</span> <span class="toc-text">5.4 从远程仓库中clone</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-在远程仓库中创建新的分支"><span class="toc-number">6.5.</span> <span class="toc-text">5.6 在远程仓库中创建新的分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-远程仓库的分支合并冲突"><span class="toc-number">6.6.</span> <span class="toc-text">5.5 远程仓库的分支合并冲突</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-使用Rebase来解决分支太乱的问题"><span class="toc-number">6.7.</span> <span class="toc-text">5.6 使用Rebase来解决分支太乱的问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-给commit打上标签-tag"><span class="toc-number">6.8.</span> <span class="toc-text">5.7 给commit打上标签(tag)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-7-1-在本地打标签"><span class="toc-number">6.8.1.</span> <span class="toc-text">5.7.1 在本地打标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-7-2-在远程仓库打标签"><span class="toc-number">6.8.2.</span> <span class="toc-text">5.7.2 在远程仓库打标签</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-小结"><span class="toc-number">7.</span> <span class="toc-text">6. 小结</span></a></li>
+        </div>
+    </div>
+    
+  </aside>
+</main>
+
+<!-- disqus 公共JS代码 -->
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES * * */
+  var disqus_shortname = "Chongqing";
+  var disqus_identifier = "Override0330.github.io/2019/03/13/git/";
+  var disqus_url = "Override0330.github.io/2019/03/13/git/";
+
+  isAgent(getDisqus)
+
+  // determine user agent in China
+  function isAgent(cb) {
+    var url = '//graph.facebook.com/feed?callback=h';
+    var xhr = new XMLHttpRequest();
+    var called = false;
+    xhr.open('GET', url);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+      called = true;
+      cb(true);
+      }
+    };
+    xhr.send();
+    // timeout 1s, this facebook API is very fast.
+    setTimeout(function() {
+      if (!called) {
+      xhr.abort();
+      cb(false)
+      }
+    }, 1000);
+  }
+
+  function getDisqus(isAgent) {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; 
+    dsq.async = true
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+  }
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+<script type="text/javascript">
+  (function(d, s) {
+      var j, e = d.getElementsByTagName(s)[0];
+
+      if (typeof LivereTower === 'function') { return; }
+
+      j = d.createElement(s);
+      j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+      j.async = true;
+
+      e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+
+  <footer>
+  <div class="copyright">
+    <div>
+      &copy; 2019 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a>&nbsp
+    </div>
+    <div>
+      Theme by <a href="https://github.com/lewis-geek/hexo-theme-Aath" target="_blank">Aath</a>
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/lib/in-view.min.js"></script>
+<script src="/lib/lodash.min.js"></script>
+<script>
+  var isDown = true
+  var oldY = 0
+  inView.offset(50)
+
+  document.body.addEventListener('touchstart', function(){});
+  
+  window.addEventListener('scroll', _.throttle(e => {
+    var currentY = window.scrollY
+    if((oldY - currentY) < 0) {
+      isDown = true
+    } else {
+      isDown = false
+    }
+    oldY = currentY
+  }, 250))
+
+  $("article img").each(function() {
+      var strA = "<a data-fancybox='gallery' href='" + this.src + "'></a>";
+      $(this).wrapAll(strA);
+  });
+
+  $('.toc-link').each(function() {
+      var href = $(this).attr("href");
+      
+      inView(href).on('exit', () => {
+        if (isDown) {
+          handleActive(href)
+        }
+      })
+
+      inView(href).on('enter', () => {
+        if (!isDown) {
+          handleActive(href)
+        }
+      })
+
+      this.onclick = function(e) {
+        var pos = $(href).offset().top - 10;
+        $("html,body").animate({scrollTop: pos}, 300);
+        setTimeout(() => {
+          handleActive(href)
+        }, 350)
+        return false
+      }
+  })
+
+  function handleActive(href) {
+    document.querySelectorAll('.toc-link').forEach(elm => {
+      elm.classList.remove('active')
+    })
+    document.querySelector(".toc [href='"+ href +"']").classList.add('active')
+  }
+</script>
+<script src="/lib/jquery.fancybox.min.js"></script>
+
+
+</body>
+</html>
